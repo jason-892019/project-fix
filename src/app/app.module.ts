@@ -7,26 +7,41 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 
+import { environment } from '../environments/environment';
+import { HomeComponent } from './home/home.component';
+import { BrowseComponent } from './browse/browse.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { GooglePayButtonModule } from '@google-pay/button-angular';
+
+import { NavComponent } from './nav/nav.component';
+import { BackDirective } from './back/back.directive';
+import { HelpComponent } from './help/help.component';
+import { InfoComponent } from './info/info.component';
+
+
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, 
+    HomeComponent,
+    BrowseComponent,
+    CheckoutComponent,
+    NavComponent,
+    BackDirective,
+    HelpComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    AngularFireModule.initializeApp({
-    apiKey: "AIzaSyAjIGz0gQe4XJ9Sw-DneoQSTu5nIvyv9Bc",
-    authDomain: "com668project-b54f4.firebaseapp.com",
-    projectId: "com668project-b54f4",
-    storageBucket: "com668project-b54f4.appspot.com",
-    messagingSenderId: "280550848732",
-    appId: "1:280550848732:web:419ad27725bb555a66dc19"
-    }),
-    AngularFirestoreModule
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    NgxPayPalModule,
+    GooglePayButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-

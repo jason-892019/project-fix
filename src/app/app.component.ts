@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore } from  '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { AngularFirestore } from  '@angular/fire/firestore';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'COM668Project';
+  title = 'angular-firebase';
 
   dataSource : any;
   id : any;
@@ -21,10 +22,13 @@ export class AppComponent implements OnInit {
   btnClose!: ElementRef;
 
 
-  
-  constructor(private  store: AngularFirestore) {
 
+  constructor(private store: AngularFirestore, private location: Location) { }
+  
+  cancel() {
+    this.location.back(); // <-- go back to previous location on cancel
   }
+
   ngOnInit(){
     this.getAll();
   }
@@ -45,15 +49,15 @@ export class AppComponent implements OnInit {
 
   add(){
     if(this.editObj){
-      this.store.collection('list').doc(this.editObj.id).update({name : this.name, personalInfo : this.personalInfo});
+      this.store.collection('/user').doc(this.editObj.id).update({name : this.name, personalInfo : this.personalInfo});
     } else {
-      this.store.collection('list').add({name : this.name, personalInfo : this.personalInfo});
+      this.store.collection('/user').add({name : this.name, personalInfo : this.personalInfo});
     }
     this.closeDialog();
   }
 
   edit(id : string){
-    this.store.collection('list').doc(id).get().subscribe((response) => {
+    this.store.collection('/user').doc(id).get().subscribe((response) => {
       this.editObj = Object.assign({id : response.id}, response.data());
       this.name = this.editObj.name;
       this.personalInfo = this.editObj.personalInfo;
@@ -62,11 +66,11 @@ export class AppComponent implements OnInit {
   }
 
   delete(id : string){
-    this.store.collection('list').doc(id).delete();
+    this.store.collection('/user').doc(id).delete();
   }
 
   getAll(){
-    this.store.collection('list').snapshotChanges().subscribe((response) => {
+    this.store.collection('/user').snapshotChanges().subscribe((response) => {
       this.dataSource = response.map(item => {
         return Object.assign({id : item.payload.doc.id}, item.payload.doc.data())
       });
